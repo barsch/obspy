@@ -166,7 +166,7 @@ class InventoryTestCase(unittest.TestCase):
             rcParams['savefig.dpi'] = 72
             inv.plot(projection="ortho", resolution="c",
                      continent_fill_color="0.3", marker="D",
-                     label=False, outfile=ic.name, colormap="hsv",
+                     label=False, outfile=ic.name, colormap="Set3",
                      color_per_network=True)
 
     @skipIf(not (HAS_COMPARE_IMAGE and HAS_BASEMAP),
