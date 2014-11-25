@@ -82,7 +82,7 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
 
-cmap = cm.hot_r
+cmap = cm.YlGnBu_r
 
 # make output human readable, adjust backazimuth to values between 0 and 360
 t, rel_power, abs_power, baz, slow = out.T

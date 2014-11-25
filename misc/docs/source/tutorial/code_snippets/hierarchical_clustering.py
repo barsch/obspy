@@ -7,7 +7,7 @@ url = "http://examples.obspy.org/dissimilarities.pkl"
 dissimilarity = pickle.load(urllib.urlopen(url))
 
 plt.subplot(121)
-plt.imshow(1 - dissimilarity, interpolation="nearest")
+plt.imshow(1 - dissimilarity, interpolation='nearest', cmap='YlGnBu_r')
 
 dissimilarity = hcluster.squareform(dissimilarity)
 threshold = 0.3
