@@ -123,6 +123,7 @@ ax.set_xticklabels(['N', 'E', 'S', 'W'])
 
 # set slowness limits
 ax.set_ylim(0, 3)
+[i.set_color('grey') for i in ax.get_yticklabels()]
 ColorbarBase(cax, cmap=cmap,
              norm=Normalize(vmin=hist.min(), vmax=hist.max()))
 
