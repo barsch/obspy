@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 from matplotlib.colorbar import Colorbar
 from matplotlib.cm import ScalarMappable
-from matplotlib.ticker import (FixedLocator, FixedFormatter,
+from matplotlib.ticker import (FixedLocator,
                                FormatStrFormatter, FuncFormatter, Formatter,
                                MaxNLocator)
 from matplotlib.dates import date2num, AutoDateLocator, \
@@ -319,7 +319,7 @@ def plot_cartopy(lons, lats, size, color, labels=None,
                  marker="o", title=None, colorbar_ticklabel_format=None,
                  show=True, proj_kwargs=None, **kwargs):  # @UnusedVariable
     """
-    Creates a basemap plot with a data point scatter plot.
+    Creates a Cartopy plot with a data point scatter plot.
 
     :type lons: list/tuple of floats
     :param lons: Longitudes of the data points.
@@ -505,7 +505,7 @@ def plot_cartopy(lons, lats, size, color, labels=None,
 
     # draw grid lines
     if projection == 'local':
-        gl = map_ax.gridlines() # draw_labels=True) - TODO: doesn't work yet.
+        gl = map_ax.gridlines()  # draw_labels=True) - TODO: doesn't work yet.
 
         # not most elegant way to calculate some round lats/lons
         def linspace2(val1, val2, N):
@@ -588,3 +588,25 @@ def plot_cartopy(lons, lats, size, color, labels=None,
         plt.show()
 
     return fig
+
+
+def plot_map(method, *args, **kwargs):
+    '''
+    Creates a map plot with a data point scatter plot.
+
+    :type method: str
+    :param method: Method to use for plotting. Possible values are:
+
+        * ``'basemap'`` to use the Basemap library. For other arguments, see
+          the :func:`plot_basemap` function.
+        * ``'cartopy'`` to use the Cartopy library. For other arguments, see
+          the :func:`plot_cartopy` function.
+    '''
+
+    if method == 'basemap':
+        return plot_basemap(*args, **kwargs)
+    elif method == 'cartopy':
+        return plot_cartopy(*args, **kwargs)
+    else:
+        raise ValueError("The method argument must be either 'basemap' or "
+                         "'cartopy', not '%s'." % (method, ))
