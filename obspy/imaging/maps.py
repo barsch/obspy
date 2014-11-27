@@ -355,9 +355,12 @@ def plot_cartopy(lons, lats, size, color, labels=None,
     :param labels: Annotations for the individual data points.
     :type projection: str, optional
     :param projection: The map projection. Currently supported are
-        * ``"cyl"`` (Will plot the whole world.)
-        * ``"ortho"`` (Will center around the mean lat/long.)
-        * ``"local"`` (Will plot around local events)
+        * ``"cyl"`` (Will plot the whole world using
+          :class:`~cartopy.ccrs.PlateCarree`.)
+        * ``"ortho"`` (Will center around the mean lat/long using
+          :class:`~cartopy.ccrs.Orthographic`.)
+        * ``"local"`` (Will plot around local events using
+          :class:`~cartopy.ccrs.AzimuthalEquidistant`.)
         * Any other Cartopy :class:`~cartopy.ccrs.Projection`. An instance of
           this class will be created using the supplied ``proj_kwargs``.
         Defaults to "cyl"
@@ -397,8 +400,12 @@ def plot_cartopy(lons, lats, size, color, labels=None,
     :param show: Whether to show the figure after plotting or not. Can be used
         to do further customization of the plot before showing it.
     :type proj_kwargs: dict
-    :param proj_kwargs: Keyword arguments to pass to the projection if it is a
-        Cartopy Projection type.
+    :param proj_kwargs: Keyword arguments to pass to the Cartopy
+        :class:`~cartopy.ccrs.Projection`. In this dictionary, you may specify
+        ``central_longitude='auto'`` or ``central_latitude='auto'`` to have
+        this function calculate the latitude or longitude as it would for other
+        projections. Some arguments may be ignored if you choose one of the
+        built-in ``projection`` choices.
     """
     min_color = min(color)
     max_color = max(color)
@@ -431,11 +438,13 @@ def plot_cartopy(lons, lats, size, color, labels=None,
     else:
         ax_x0, ax_width = 0.05, 0.90
 
+    proj_kwargs = proj_kwargs or {}
     if projection == 'cyl':
-        proj = ccrs.PlateCarree()
+        proj = ccrs.PlateCarree(**proj_kwargs)
     elif projection == 'ortho':
-        proj = ccrs.Orthographic(central_latitude=np.mean(lats),
-                                 central_longitude=np.mean(lons))
+        proj_kwargs['central_latitude'] = np.mean(lats)
+        proj_kwargs['central_longitude'] = np.mean(lons)
+        proj = ccrs.Orthographic(**proj_kwargs)
     elif projection == 'local':
         if min(lons) < -150 and max(lons) > 150:
             max_lons = max(np.array(lons) % 360)
@@ -467,14 +476,13 @@ def plot_cartopy(lons, lats, size, color, labels=None,
         else:
             height = width / aspect
 
+        proj_kwargs['central_latitude'] = lat_0
+        proj_kwargs['central_longitude'] = lon_0
         # TODO: Not the correct projection!
-        proj = ccrs.Stereographic(central_latitude=lat_0,
-                                  central_longitude=lon_0)
+        proj = ccrs.Stereographic(**proj_kwargs)
 
     # User-supplied projection.
     elif isinstance(projection, type):
-        proj_kwargs = proj_kwargs or {}
-
         if 'central_longitude' in proj_kwargs:
             if proj_kwargs['central_longitude'] == 'auto':
                 proj_kwargs['central_longitude'] = np.mean(lons)
