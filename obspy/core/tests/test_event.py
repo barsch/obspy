@@ -22,6 +22,13 @@ try:
 except ImportError:
     HAS_BASEMAP = False
 
+# checking for Cartopy
+try:
+    import cartopy  # NOQA
+    HAS_CARTOPY = True
+except ImportError:
+    HAS_CARTOPY = False
+
 
 class EventTestCase(unittest.TestCase):
     """
@@ -425,50 +432,107 @@ class CatalogTestCase(unittest.TestCase):
         cat = readEvents(self.neries_xml)
         self.assertEqual(str(cat.resource_id), r"smi://eu.emsc/unid")
 
-    @skipIf(not (HAS_COMPARE_IMAGE and HAS_BASEMAP),
-            'nose not installed, matplotlib too old or basemap not installed')
+
+@skipIf(not (HAS_COMPARE_IMAGE and HAS_BASEMAP),
+        'nose not installed, matplotlib too old or Basemap not installed')
+class CatalogBasemapTestCase(unittest.TestCase):
+    """
+    Test suite for obspy.core.event.Catalog.plot with Basemap
+    """
+    def setUp(self):
+        # directory where the test files are located
+        self.image_dir = os.path.join(os.path.dirname(__file__), 'images')
+        # Clear the Resource Identifier dict for the tests. NEVER do this
+        # otherwise.
+        ResourceIdentifier._ResourceIdentifier__resource_id_weak_dict.clear()
+        # Also clear the tracker.
+        ResourceIdentifier._ResourceIdentifier__resource_id_tracker.clear()
+
     def test_catalog_plot_cylindrical(self):
-        """
-        Tests the catalog preview plot, default parameters.
-        """
+        '''
+        Tests the catalog preview plot, default parameters, using Basemap.
+        '''
         cat = readEvents()
-        with ImageComparison(self.image_dir, "catalog1.png") as ic:
+        with ImageComparison(self.image_dir, 'catalog-basemap1.png') as ic:
             rcParams['savefig.dpi'] = 72
-            cat.plot(outfile=ic.name)
+            cat.plot(method='basemap', outfile=ic.name)
 
-    @skipIf(not (HAS_COMPARE_IMAGE and HAS_BASEMAP),
-            'nose not installed, matplotlib too old or basemap not installed')
     def test_catalog_plot_ortho(self):
-        """
+        '''
         Tests the catalog preview plot, ortho projection, some non-default
-        parameters.
-        """
+        parameters, using Basemap.
+        '''
         cat = readEvents()
-        with ImageComparison(self.image_dir, "catalog2.png") as ic:
+        with ImageComparison(self.image_dir, 'catalog-basemap2.png') as ic:
             rcParams['savefig.dpi'] = 72
-            cat.plot(outfile=ic.name, projection="ortho",
-                     resolution="c",
-                     water_fill_color="b", label=None)
+            cat.plot(method='basemap', outfile=ic.name, projection='ortho',
+                     resolution='c', water_fill_color='b', label=None)
 
-    @skipIf(not (HAS_COMPARE_IMAGE and HAS_BASEMAP),
-            'nose not installed, matplotlib too old or basemap not installed')
     def test_catalog_plot_local(self):
-        """
+        '''
         Tests the catalog preview plot, local projection, some more non-default
-        parameters.
-        """
+        parameters, using Basemap.
+        '''
         cat = readEvents()
         reltol = 1
         # some ticklabels are slightly offset on py 3.3.3 in travis..
         # e.g. see http://tests.obspy.org/13309/#1
         if (sys.version_info[0]) == 3:
             reltol = 5
-        with ImageComparison(self.image_dir, "catalog3.png",
+        with ImageComparison(self.image_dir, 'catalog-basemap3.png',
                              reltol=reltol) as ic:
             rcParams['savefig.dpi'] = 72
-            cat.plot(outfile=ic.name, projection="local",
-                     resolution="i", continent_fill_color="0.3",
-                     color="date", colormap="gist_heat")
+            cat.plot(method='basemap', outfile=ic.name, projection='local',
+                     resolution='i', continent_fill_color='0.3',
+                     color='date', colormap='gist_heat')
+
+
+@skipIf(not (HAS_COMPARE_IMAGE and HAS_CARTOPY),
+        'nose not installed, matplotlib too old or Cartopy not installed')
+class CatalogCartopyTestCase(unittest.TestCase):
+    """
+    Test suite for obspy.core.event.Catalog.plot using Cartopy
+    """
+    def setUp(self):
+        # directory where the test files are located
+        self.image_dir = os.path.join(os.path.dirname(__file__), 'images')
+        # Clear the Resource Identifier dict for the tests. NEVER do this
+        # otherwise.
+        ResourceIdentifier._ResourceIdentifier__resource_id_weak_dict.clear()
+        # Also clear the tracker.
+        ResourceIdentifier._ResourceIdentifier__resource_id_tracker.clear()
+
+    def test_catalog_plot_cylindrical(self):
+        '''
+        Tests the catalog preview plot, default parameters, using Cartopy.
+        '''
+        cat = readEvents()
+        with ImageComparison(self.image_dir, 'catalog-cartopy1.png') as ic:
+            rcParams['savefig.dpi'] = 72
+            cat.plot(method='cartopy', outfile=ic.name)
+
+    def test_catalog_plot_ortho(self):
+        '''
+        Tests the catalog preview plot, ortho projection, some non-default
+        parameters, using Cartopy.
+        '''
+        cat = readEvents()
+        with ImageComparison(self.image_dir, 'catalog-cartopy2.png') as ic:
+            rcParams['savefig.dpi'] = 72
+            cat.plot(method='cartopy', outfile=ic.name, projection='ortho',
+                     resolution='c', water_fill_color='b', label=None)
+
+    def test_catalog_plot_local(self):
+        '''
+        Tests the catalog preview plot, local projection, some more non-default
+        parameters, using Cartopy.
+        '''
+        cat = readEvents()
+        with ImageComparison(self.image_dir, 'catalog-cartopy3.png') as ic:
+            rcParams['savefig.dpi'] = 72
+            cat.plot(method='cartopy', outfile=ic.name, projection='local',
+                     resolution='50m', continent_fill_color='0.3',
+                     color='date', colormap='gist_heat')
 
 
 class WaveformStreamIDTestCase(unittest.TestCase):
