@@ -31,7 +31,12 @@ except AttributeError:
     pass
 
 plt.subplot(122)
-hierarchy.dendrogram(linkage, color_threshold=0.3)
+try:
+    hierarchy.dendrogram(linkage, color_threshold=0.3,
+                         above_threshold_color=cmap(0))
+except TypeError:
+    # Old version of SciPy
+    hierarchy.dendrogram(linkage, color_threshold=0.3)
 plt.xlabel("Event number")
 plt.ylabel("Dissimilarity")
 plt.show()
