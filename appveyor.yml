@@ -37,3 +37,10 @@ build: false
 
 test_script:
   - "%CMD_IN_ENV% python setup.py develop"
+  - "python -m obspy.core.scripts.runtests -n appveyor-ci -r"
+
+notifications:
+  provider: Email
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: false
