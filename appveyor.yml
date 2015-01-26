@@ -13,8 +13,8 @@ environment:
 #    - PYTHON_VERSION: "2.6"
 #      PYTHON_ARCH: "64"
 
-#    - PYTHON_VERSION: "2.7"
-#      PYTHON_ARCH: "64"
+    - PYTHON_VERSION: "2.7"
+      PYTHON_ARCH: "64"
 
 #    - PYTHON_VERSION: "3.3"
 #      PYTHON_ARCH: "64"
