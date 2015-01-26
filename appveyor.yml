@@ -12,11 +12,11 @@ environment:
   matrix:
     - PYTHON_VERSION: "2.6"
       PYTHON_ARCH: "32"
-      BASEMAP: "http://www.geophysik.uni-muenchen.de/~krischer/_basemap_/basemap-1.0.8-cp26-none-win32.whl"
+      BASEMAP: "pip install http://188.166.43.188/basemap-1.0.8-cp26-none-win32.whl"
 
     - PYTHON_VERSION: "2.6"
       PYTHON_ARCH: "64"
-      BASEMAP: "pip install http://www.geophysik.uni-muenchen.de/~krischer/_basemap_/basemap-1.0.8-cp26-none-win_amd64.whl"
+      BASEMAP: "pip install http://188.166.43.188/basemap-1.0.8-cp26-none-win_amd64.whl"
 
     - PYTHON_VERSION: "2.7"
       PYTHON_ARCH: "32"
@@ -28,19 +28,19 @@ environment:
 
     - PYTHON_VERSION: "3.3"
       PYTHON_ARCH: "32"
-      BASEMAP: "pip install http://www.geophysik.uni-muenchen.de/~krischer/_basemap_/basemap-1.0.8-cp33-none-win32.whl"
+      BASEMAP: "pip install http://188.166.43.188/basemap-1.0.8-cp33-none-win32.whl"
 
     - PYTHON_VERSION: "3.3"
       PYTHON_ARCH: "64"
-      BASEMAP: "pip install http://www.geophysik.uni-muenchen.de/~krischer/_basemap_/basemap-1.0.8-cp33-none-win_amd64.whl"
+      BASEMAP: "pip install http://188.166.43.188/basemap-1.0.8-cp33-none-win_amd64.whl"
 
     - PYTHON_VERSION: "3.4"
       PYTHON_ARCH: "32"
-      BASEMAP: "pip install http://www.geophysik.uni-muenchen.de/~krischer/_basemap_/basemap-1.0.8-cp34-none-win32.whl"
+      BASEMAP: "pip install http://188.166.43.188/basemap-1.0.8-cp34-none-win32.whl"
 
     - PYTHON_VERSION: "3.4"
       PYTHON_ARCH: "64"
-      BASEMAP: "pip install http://www.geophysik.uni-muenchen.de/~krischer/_basemap_/basemap-1.0.8-cp34-none-win_amd64.whl"
+      BASEMAP: "pip install http://188.166.43.188/basemap-1.0.8-cp34-none-win_amd64.whl"
 
 
 platform:
